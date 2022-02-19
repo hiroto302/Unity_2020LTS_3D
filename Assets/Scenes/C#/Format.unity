@@ -328,6 +328,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc00c67784c644d52ba3285e85b8af3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Example:
+    myProperty1: 0
+  Example1:
+    field1: 0
+  Example2:
+    <MyProperty1>k__BackingField: 20
 --- !u!4 &1834023469
 Transform:
   m_ObjectHideFlags: 0
