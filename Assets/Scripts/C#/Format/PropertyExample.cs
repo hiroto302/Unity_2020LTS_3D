@@ -39,6 +39,12 @@ namespace Format
         void Start()
         {
             Rect1 rect1  = new Rect1(1.0f, 1.0f);
+            Player1 player1 = new Player1();
+            Debug.Log(player1.Name);
+            Debug.Log(player1.Level);
+            Player2 player2 = new Player2();
+            Debug.Log(player2.Name);
+            Debug.Log(player2.Level);
         }
     }
 
@@ -48,7 +54,7 @@ namespace Format
 
     上記のものが以下の３点できるようになった。
     1. 読み取り専用自動実装プロパティーが、コンストラクタで初期化可能になった
-    2. 読み取り書き込み自動実装プロパティーがで、フィールド初期化子を使えるようになった
+    2. 読み取り書き込み自動実装プロパティーが、フィールド初期化子を使えるようになった
     3. 自動実装プロパティーのバッキングフィールドに属性をつけれるようになった
     */
     public class Rect
@@ -98,5 +104,32 @@ namespace Format
             // this.Width = width;
             // this.Height = height;
         }
+    }
+
+    // 2. 読み取り書き込み自動実装プロパティーが、フィールド初期化子を使えるようになった について
+    public class Player
+    {
+        public string Name { get; set; }
+        public int Level { get; set; }
+    }
+    // 初期値を与えたい時、C#6.0 より以前では 自動実装プロパティーを諦めなくてはならなかった。
+    public class Player1
+    {
+        // 以下のような記述では、初期化されていない。他クラスで Name を参照すると Null となる
+        private string name = "No Name";
+        public string Name{ get; set; }
+        // こちらは、初期化されてるものを返す。
+        private int level = 1;
+        public int Level
+        {
+            get { return level; }
+            set { level = value ; }
+        }
+    }
+    // C#6.0 以降では フィールド初期値を使用することで設定できるようになった!
+    public class Player2
+    {
+        public string Name { get; set; } = "Player2 Name";
+        public int Level { get; set; } = 2;
     }
 }
