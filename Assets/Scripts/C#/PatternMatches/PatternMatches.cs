@@ -184,6 +184,46 @@ namespace PatternMathes
             }
         }
         # endregion
-    
+
+        # region プロパティーパターン、switch 文の式化、破棄パターン
+        // プロパティーパターンでは、対象オブジェクトのプロパティー、フィールドとマッチするかを判定するパターン
+        public static float CalculationArea4(Shape shape)
+        {
+            switch(shape)
+            {
+                // case Square square when square.Side == 0f:
+                // Square 型で かつ Side が 0の時
+                case Square { Side: 0f }:
+                // case Circle circle when circle.Radius == 0f:
+                case Circle { Radius: 0f }:
+                // case Rectangle rectangle when rectangle.Width == 0f || rectangle.Height == 0f:
+                case Rectangle { Width: 0, Height: 0}:
+                    return 0f;
+                default:
+                    throw new System.ArgumentException("0以上の値です");
+            }
+        }
+
+        // さらに、C# 8.0 からは switch式が 登場し、switch を式として記述することができるようになった
+        public static float CalculationArea5(Shape shape) => shape switch
+        {
+            // 型パターン
+            Square square => square.Side * square.Side,
+            Circle circle => circle.Radius * circle.Radius * Mathf.PI,
+            Rectangle rectangle => rectangle.Width * rectangle.Height,
+
+            // 破棄パターン : 何ににもマッチしないと判定され、判定した対象は無視し破棄する
+            _ => throw new System.ArgumentException("サポートされていないshape です")
+        };
+
+        public static string RockPaperScissors3(Hand first, Hand second) => (first, second) switch
+        {
+            // タプルパターン
+            (Hand.Rock, Hand.Scissors) => "1P がグーで勝ち",
+            // 破棄パターン
+            _ => "引き分け"
+        };
+
+        # endregion
     }
 }
