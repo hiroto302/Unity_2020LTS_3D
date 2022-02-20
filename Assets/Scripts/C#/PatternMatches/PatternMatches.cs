@@ -36,7 +36,6 @@ namespace PatternMathes
             PatternExample(n);
             string s = "aaa";
             PatternExample(s);
-
         }
 
         # region Pattern Matche : 型パターン の使用例
@@ -141,7 +140,7 @@ namespace PatternMathes
         }
         #endregion
 
-        # region タプルパターン の使用例
+        # region タプルパターン、位置指定パターンの使用例
 
         // ジャンケンを表す列挙型
         public enum Hand
@@ -161,8 +160,30 @@ namespace PatternMathes
                 // 他の勝利判定記述省略
                 default: return "引き分け";
             }
+        }
 
+        // 位置指定パターンでは分解できるオブジェクトに対して利用可能でタプルパターンと似た記述が可能
+        public class Hands
+        {
+            public Hand First { get; set; }
+            public Hand Second { get; set; }
+            // 分解できるよう Deconstruct メソッドを用意
+            // 分解した際の第一要素は First
+            // 分解した際の第二要素は Second
+            public void Deconstruct (out Hand first, out Hand second) =>
+                (first, second ) = (First, Second);
+        }
+        // 今回の引数では hands クラスを使用
+        static string RockPaperScissors1(Hands hands)
+        {
+            switch(hands)
+            {
+                // 分解した時の第一要素 hands.First が Hand.Rock かつ 第二要素 hands.Second が Hand.Scissors の時マッチ
+                case ( Hand.Rock, Hand.Scissors): return " 1Pがゲームで勝ち";
+                default: return " 引き分け";
+            }
         }
         # endregion
+    
     }
 }
