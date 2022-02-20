@@ -47,8 +47,35 @@ public class ValueTuple_Sample : MonoBehaviour
         // 下記については、要素の一つ目が無視されているだけでは? 二つ目の要素だけ比較しているのでは？
         Debug.Log(myStatusTuple == (Value: 32, Name: "Kento"));     // true  : 要素名が違っても、要素の型と順番が同じで、要素が等値ならばok
         Debug.Log(myStatusTuple == (Value: 30, Name: "Kento"));     // false となったので、Value という要素名が無視され、要素の値のみ捉えられている
+
+        // パターン7
+        // ValueTuple の 「分解」 について
+        // 分解することで要素を個別に受け取ることができる
+        int[] values = { 10, 20, 30, 40, 50};
+        // ValueTuple 型で受け取り
+        (int Min, int Max) result = CalculateMinMax(values);
+        // var 型で受け取り
+        var result1 = CalculateMinMax(values);
+        // 分解を利用して個別に要素を受け取る
+        (int min0, int max0) = CalculateMinMax(values);
+        Debug.Log(min0 + " : min0");
+        Debug.Log(max0 + " : max0");
+        // 分解と var を利用して 個別に受け取ることも可能
+        (var min1, var max1) = CalculateMinMax(values);
+
+        // パターン8 の使用
+        // out パラメーターを持つ Deconstruct メソッドを拡張関数として使用すれば分解できる
+        var (x, y, z) = transform.position;
+        Debug.Log(x);
+
+        // パターン9 「破棄」について
+        // 分解で受け取る際、使わない変数・要素は警告の対象となる。使わないものを破棄することができる 「 _ 」を利用する。
+        (_, _, int age) = LoadPerson();
+        Debug.Log(age);
+        // このようにすることで、必要な要素のみ受け取れることで、可読性が向上し「使わない変数がある」という警告を回避できる
     }
 
+    // パターン６
     // ValueTuple が活躍する時の一つは、複数の値を返すメソッドを作成する場合
     // 最小値 と 最大値 を同時に返すメソッド
     // わざわざクラスや構造体を作成しなくても、複数の値を返すメソッドを作成することが出来た。
@@ -67,5 +94,26 @@ public class ValueTuple_Sample : MonoBehaviour
             if (value > max ) max = value;
         }
         return (min, max);
+    }
+
+    // ValueTuple を返すメソッド
+    public (string FirstName, string LastName, int Age) LoadPerson()
+    {
+        return ("T." , "H.", 26);
+    }
+
+}
+
+// パターン8
+// out パラメーターを持つ Deconstruct メソッドを拡張関数として利用することでも、分解は利用可能になる。
+// 以下のように、Unity の Vector3 用の分解のために Deconstruct 拡張関数を定義する
+public static class Vector3Extensions
+{
+    public static void Deconstruct(this Vector3 value, out float x, out float y, out float z)
+    {
+        // The out parameter 'x' must be assigned to before control leaves the current method
+        x = value.x;
+        y = value.y;
+        z = value.z;
     }
 }
