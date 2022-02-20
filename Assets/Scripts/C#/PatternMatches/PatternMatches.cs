@@ -140,5 +140,29 @@ namespace PatternMathes
             }
         }
         #endregion
+
+        # region タプルパターン の使用例
+
+        // ジャンケンを表す列挙型
+        public enum Hand
+        {
+            Rock,
+            Paper,
+            Scissors
+        }
+        // ジャンケンの勝利判定メソッド 引数は 2人の Player の手を表すもの
+        static string RockPaperScissors(Hand playerFirst, Hand playerSecond)
+        {
+            // タプルパターン
+            switch (playerFirst, playerSecond)
+            {
+                // タプルの第一要素 が Rock、第二要素が Scissors のときマッチ
+                case(Hand.Rock, Hand.Scissors) : return " 1P がグーで勝ち";
+                // 他の勝利判定記述省略
+                default: return "引き分け";
+            }
+
+        }
+        # endregion
     }
 }
