@@ -26,6 +26,14 @@ namespace PatternMathes
 
     public class PatternMatches : MonoBehaviour
     {
+        void Start()
+        {
+            Square square = new Square();
+            square.Side = 2.0f;
+            Debug.Log(CalculationArea(square) + " : SquareArea");
+        }
+
+        # region Pattern Matche : 型パターン の使用例
         // パターンマッチを用いらないパターン
         public static float CalculationArea(Shape shape)
         {
@@ -75,6 +83,34 @@ namespace PatternMathes
                 throw new System.ArgumentException("サポートされていない shape です");
             }
         }
-
+        // switch文 と合わせたパターンマッチで実装
+        public static float CalculationArea2(Shape shape)
+        {
+            switch(shape)
+            {
+                case Square square:
+                    return square.Side * square.Side;
+                case Circle circle:
+                    return circle.Radius * circle.Radius * Mathf.PI;
+                case Rectangle rectangle:
+                    return rectangle.Width * rectangle.Height;
+                default:
+                    throw new System.ArgumentException("サポートされていない shape です");
+            }
+        }
+        // パターンマッチを使用した switch 文では、when 句を使用することでより細かい条件判定が可能となる
+        public static float CalculationArea3(Shape shape)
+        {
+            switch(shape)
+            {
+                case Square square when square.Side == 0f:
+                case Circle circle when circle.Radius == 0f:
+                case Rectangle rectangle when rectangle.Width == 0f || rectangle.Height == 0f:
+                    return 0f;
+                default:
+                    throw new System.ArgumentException("0以上の値です");
+            }
+        }
+        # endregion
     }
 }
