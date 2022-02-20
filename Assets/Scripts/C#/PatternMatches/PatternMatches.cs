@@ -31,6 +31,12 @@ namespace PatternMathes
             Square square = new Square();
             square.Side = 2.0f;
             Debug.Log(CalculationArea(square) + " : SquareArea");
+
+            int n = 10;
+            PatternExample(n);
+            string s = "aaa";
+            PatternExample(s);
+
         }
 
         # region Pattern Matche : 型パターン の使用例
@@ -112,5 +118,27 @@ namespace PatternMathes
             }
         }
         # endregion
+
+        # region 型パターン、定数パターン、var パターンの使用例
+        // object : .NET クラス階層のすべてのクラスをサポートし、派生クラスに下位レベルのサービスを提供する。 これは、全 .NET クラスの基本クラスであり、型階層のルート。
+        public static void PatternExample(object argument)
+        {
+            switch(argument)
+            {
+                // 定数パターン : 定数との比較判定
+                case 0:
+                    Debug.Log("定数 0");
+                    break;
+                // 型パターン と when句の使用
+                case int num when num % 2 == 0:
+                    Debug.Log("偶数");
+                    break;
+                // varパターン : 何でもマッチすると判定され、判定した対象を変数で受け取る
+                case var X:
+                    Debug.Log($"argumentはそれ以外。{X}");
+                    break;
+            }
+        }
+        #endregion
     }
 }
