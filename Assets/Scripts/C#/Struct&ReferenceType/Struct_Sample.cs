@@ -15,16 +15,34 @@ namespace Structure
             // ReadOnlyExample readOnlyExample = new ReadOnlyExample();
             // readOnlyExample.UpdateStructExample();
 
+            // 2. について
             Example1 refExample1 = new Example1();
             refExample1.Execution();
             // ref は、代入可能な変数であること
             ref int refNum =  ref refExample1.RefExample(ref num1, 2);
-            Debug.Log(refNum);
+            Debug.Log(refNum + " : refNum");
+
+            // 3. について
+            Example2 example2 = new Example2();
+
+            // in は、代入可能な変数 or リテラルを直接 記述しても良い
+            // また in と記述しなくても良い。
+            int inNum = 1;
+            // example2.PassInParameter(1);
+            example2.PassInParameter(inNum);
+            // example2.PassInParameter(in inNum);
+            // example2.PassInParameter(refNum);
+
+            // readonly な参照戻り値の活用例
+
         }
     }
 
-    // readonly 修飾子について
-    // 構造体において、readonly フィールドでは 防御的コピーが生じることがある。
+    /* 1. readonly 修飾子について
+        構造体において、readonly フィールドでは 防御的コピーが生じることがある。
+        (他の実行するクラスで、readonly で構造体のインスタンスを作成し、そのフィールドを変更してしまった処理を行った時発生する。
+        その構造体は readonly なのに、フィールドの値を書き換えてしまうよな処理を実行してしまうと、防御的コピーが発生してしまう)
+    */
     // 構造体の StructExample を作成
     public struct StructExample
     {
@@ -128,4 +146,81 @@ namespace Structure
             return ref refNum;
         }
     }
+
+    /* 3. パラメーター の in 修飾子 と ref readonly
+
+    メソッドの値型の引数を渡す際、参照引数を使う時、「メソッド内でその引数の参照先の書き換えをしない」という制限をしたい時に使用する
+    ref を in とすれば良い。また呼び出し側のコードは ref と異なる記述が出来る。
+
+    参照はできるが参照先の書き換えができない、 readonly な 参照ローカル変数・参照戻り値もある
+    */
+    public class Example2
+    {
+        public void PassInParameter(in int num)
+        {
+            Debug.Log(num); // 参照渡し可能
+            int n = num;
+            // num = 2;     // 書き換えは不可
+        }
+
+        public void RefReadonly()
+        {
+            int original = 0;
+            ref int refNumber = ref original;               // 参照ローカル変数 : original をコピーせずに参照する
+            ref readonly int refReadonlyNum = ref original; // readonly な参照ローカル変数
+
+            // 全て0 と表示される
+            Debug.Log(original);
+            Debug.Log(refNumber);
+            Debug.Log(refReadonlyNum);
+
+            // 参照ローカル変数を変更、参照しているものは original。 参照先の original が上書きされるので下記のような結果になる
+            refNumber = 100;
+            // 全て100 と表示される
+            Debug.Log(original);
+            Debug.Log(refNumber);
+            Debug.Log(refReadonlyNum);
+
+            // readonly な参照ローカル変数は、参照先を書き換えできない
+            // refReadonlyNum = 10;
+        }
+    }
+    // readonly な参照戻り値の例
+    public class RefReturnTypeExample
+    {
+        Vector3 vector3;
+        public RefReturnTypeExample(Vector3 initialValue)
+        {
+            vector3 = initialValue;
+        }
+        // 下記の二つのプロパティは どちらも同一の vector3 を参照している
+        // フィールド vector3 を参照する 「ref Vector3」のプロパティ
+        public ref Vector3 RefProperty
+        {
+            get { return ref vector3; }
+        }
+        // フィールド vector3 を参照する 「 ref readonly Vector3」のプロパティ
+        // readonly な参照戻り値 を返す
+        public ref readonly Vector3 RefReadonlyProperty
+        {
+            get { return ref vector3; }
+        }
+
+        public void Execution()
+        {
+            RefReturnTypeExample refReturnTypeExample = new RefReturnTypeExample(Vector3.zero);
+
+            // RefProperty は、ゲッターだが、参照を返すプロパティ
+            // ref でなければコンパイルエラーになる
+            refReturnTypeExample.RefProperty = new Vector3(1.0f, 2.0f, 3.0f);
+            // ref readonly なので、書き換え不可。
+            // refReturnTypeExample.RefReadonlyProperty = new Vector3(1.0f, 2.0f, 3.0f);
+            // 読み取りは ok。結果的に ref プロパティに readonly を付与し、ゲッターのみ記述になることで
+            // readonly な参照戻り値と同義になる。
+            Debug.Log(refReturnTypeExample.RefReadonlyProperty);
+        }
+    }
+
+    // 3. で見てきた上記の記述は、メソッドの引数や返り値でのコピーがなくなりパフォーマンスの改善に繋がる.
+    // しかし場合によっては、 readonly 構造体フィールドと同じように 「防御的コピー」が発生してしまい、パフォーマンスが悪化してしまうことがないように考慮すること。
 }
