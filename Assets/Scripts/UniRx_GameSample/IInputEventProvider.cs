@@ -35,7 +35,7 @@ namespace UniRxSampleGame.Players
         // 移動操作
         IReadOnlyReactiveProperty<Vector3> MoveDirection { get; }
         // 弱攻撃
-        IObservable<Unit> OnLightAttach { get; }
+        IObservable<Unit> OnLightAttack { get; }
         // 強攻撃
         IObservable<Unit> OnStrongAttack { get; }
         // ジャンプ
