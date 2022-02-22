@@ -22,7 +22,7 @@ namespace UniRxSample
             var subject = new Subject<string>();
 
             // subject に Observer オブジェクトを登録する。イベントが発行され時、 subjectに 登録されている observer に イベントメッセージのブロードキャストが行われる。
-            // そのブロードキャスト(メッセージ) を受信(購読している) observer が実行する、イベントのハンドリング内容を下記に記述する
+            // そのブロードキャスト(メッセージ) を受信(購読している)した observer が実行する、イベントのハンドリング内容を下記に記述する
             subject
                 .Subscribe(
                     onNext: x => Debug.Log(x),
