@@ -135,6 +135,9 @@ GameObject:
   - component: {fileID: 124449068}
   - component: {fileID: 124449067}
   - component: {fileID: 124449066}
+  - component: {fileID: 124449070}
+  - component: {fileID: 124449072}
+  - component: {fileID: 124449071}
   m_Layer: 0
   m_Name: Player_Sphere
   m_TagString: Untagged
@@ -218,6 +221,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &124449070
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124449065}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!114 &124449071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124449065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18ed4e865ca846758911ef183b254f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dashSpeed: 3
+  _jumpSpeed: 5.5
+  _characterHeightOffset: 0.15
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &124449072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124449065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58533344f69104f7ca5c07d4dc17b36a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &356043863
 GameObject:
   m_ObjectHideFlags: 0
