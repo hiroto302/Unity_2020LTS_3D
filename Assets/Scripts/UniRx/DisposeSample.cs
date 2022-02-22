@@ -12,6 +12,21 @@ Observable の購読(イベント待ち受け)を終了する方法 は3つあ�
 IObservable<T>.Subscribe()を実行した時、返り値として IDisposable が返される。
 この、IDisposable.Dispose() を実行することで、購読処理を中断することができる。
 */
+
+/* 2. OnCompleted / OnError メッセージを発行する
+Observable からOnCompleted メッセージ または OnError メッセージが発行されると、その Observable は「終了した」という扱いになる
+これらのメッセージを受信したタイミングで、Subscribe() で登録した Observer の登録が解除される。
+この仕組みを利用し、Observable を自分で定義する場合、使い終わったタイミングで OnCompleted を実装することもオススメである。
+
+下記のサンプルのような、 Observable (EverUpdate()を利用したやつ)は、OnCompleted を発行することなく、無限に動作するものもあるので Dispose() 処理をよび出すこと。
+*/
+
+/* 3. ストリームソース側を Dispose()する
+ストリームソース(Observerable の根源、Subject など)側に、Dispose()が定義されている場合、それをよび出すことで購読を終了できる
+この場合は、ストリームソースに登録されている全ての Observer 登録が解除される
+*/
+
+
 namespace UniRx
 {
     public class DisposeSample : MonoBehaviour
