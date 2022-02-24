@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 671494366}
   - component: {fileID: 671494365}
   m_Layer: 0
-  m_Name: Coroutine_LoadPrefab
+  m_Name: Asynchronous_LoadPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
