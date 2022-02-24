@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 using System;
+using System.Threading.Tasks; // C# 標準機能の Task に必要
 using Cysharp.Threading.Tasks;
 
 /* 同期処理と非同期処理の違い をみる
@@ -64,6 +65,10 @@ public class Coroutine_LoadPrefab : MonoBehaviour
         InstantiatePrefabAction += InstantiateLoadedPrefab;
         StartCoroutine(LoadPrefabRoutine("LoadedItem_Sample", InstantiatePrefabAction));
     #endregion
+
+    #region  5. async / await を用いて記述したもの
+        LoadAndInstantiatePrefab("LoadedItem_Sample");
+    #endregion
     }
 
     // nameで 指定した prefab を seconds 送らせて生成するメソッド
@@ -123,4 +128,51 @@ public class Coroutine_LoadPrefab : MonoBehaviour
     {
         Instantiate(prefab);
     }
+
+    /* 5. 4で実装した機能をC#標準機能の async / await で実装する。 ここで、3つのキーワードに着目する
+
+    async : 非同期メソッドであることをマーク. コンパイラに 非同期メソッドとして扱われる
+    - 戻り値がないときは、void または Task などを定義。エラーハンドリングを行うために async Task とするのが一般的)
+    - 非同期メソッドから値を返す場合は、戻り値の型を Task<T> などにする
+    - Unity のイベント処理(Start や Awake、ボタンのクリックなど) を 非同期かできる
+
+    await : 非同期な(async) メソッドの実行完了を待つという宣言。非同期処理内(async キーワードのあるメソッド) のみ利用可能。対象の待ち受けが可能となると言える
+    - await 木ワードは、非同期メソッド内で何度も使える
+    - コルーチンの yield return に相当
+    - 非同期メソッドの結果を受け取って変数に入れられる
+
+    Task : 「非同期処理の実行タイミングの制御や、その結果の保持」の役割
+    - 非同期の動作を管理するクラス
+
+    「 async / await 」 は、単に 「非同期処理を簡単に待ち受けられるようにする」のが役割である
+    「 Task 」 は、「非同期処理の実行」 が役割である
+    ]
+    */
+
+    // 非同期処理(async) 戻り値は GameObject(Task) のメソッド
+    async Task<GameObject> LoadPrefab(string name)
+    {
+        ResourceRequest request = Resources.LoadAsync<GameObject>($"Coroutine_LoadPrefab/{name}");
+        // isDone : 動作が終了したか確認
+        while (!request.isDone)
+        {
+            // 得たいゲームオブジェクトのロードが完了するまで待機
+            // awaitを使うことでTaskの終了を待つ
+            await Task.Delay(100);
+        }
+        // 返す値
+        return request.asset as GameObject;
+    }
+
+    // 上記の Load メソッド実行するメソッド
+    async void LoadAndInstantiatePrefab(string name)
+    {
+        // await で 非同期メソッドの結果を受け取って、Prefab変数に入れている
+        GameObject prefab = await LoadPrefab(name);
+        Instantiate(prefab);
+
+        // 直接代入も可能
+        Instantiate(await LoadPrefab(name));
+    }
+
 }
