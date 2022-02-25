@@ -27,7 +27,7 @@ public class UniTask_Sample_2 : MonoBehaviour
     {
         // 1. 呼び出し方
         // Coroutine
-        StartCoroutine(CoroutineExample());
+        // StartCoroutine(CoroutineExample());
 
         // UniTask
         // 戻り値UniTaskの関数は、普通の関数と同じように書ける
@@ -36,7 +36,9 @@ public class UniTask_Sample_2 : MonoBehaviour
         // 「この関数は非同期(async)だから、呼んだ関数が終わるまで待たないけど、大丈夫？」みたいな警告
         // つまり、実行する UniTask 処理の完了を待たずに、同期的に次の処理へ進むけど いいのか? ってこと.
         // Forget() をつけることで 大丈夫であることを伝える
-        UniTaskExample().Forget();
+        // UniTaskExample().Forget();
+
+        StartCoroutine(UseUniTaskExample());
     }
 
     // 1. コルーチン処理 : yield return null,
@@ -50,6 +52,8 @@ public class UniTask_Sample_2 : MonoBehaviour
     {
         // PlayerLoopTiming.Update : 関数の更新タイミングをUnity標準のUpdate関数に合わせることを指定
         await UniTask.Yield(PlayerLoopTiming.Update);
+
+        Debug.Log("UniTaskExample 実行完了");
     }
 
     // その他の比較
@@ -76,6 +80,13 @@ public class UniTask_Sample_2 : MonoBehaviour
         await UniTaskExample();
     }
 
+    // コルーチン で UniTask を呼ぶこともできる
+    IEnumerator UseUniTaskExample()
+    {
+        yield return UniTask.Delay(1000).ToCoroutine();
+
+        yield return UniTaskExample();
+    }
 
 
 }
