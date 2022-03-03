@@ -39,7 +39,7 @@ namespace MultipleScenes
         void Start()
         {
             // シーンをまたいで消さないオブジェクト
-            // DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this);
 
 
             // LoadSingleScene(1);
