@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // パターンマッチ(パターンが示す条件に一致するかを判定)により、制御フローがパワフルになり、かつ簡潔に書けるようになる
 // 型やプロパティ、値などによる判定に有効
@@ -205,6 +206,9 @@ namespace PatternMathes
         }
 
         // さらに、C# 8.0 からは switch式が 登場し、switch を式として記述することができるようになった
+        // 式であるからには、switch 式は必ず値を返す必要があります。 なので、パターンには網羅性(exhaustiveness)が求められる。
+        // すなわち、「どのパターンも満たさずswitch式を抜けてしまう」みたいな状態は許容されない。ちゃんと C# コンパイラーが網羅性をチェックしていて、抜けがあるとコンパイル エラーになります。
+        // 多くの場合、末尾にvarパターンか破棄パターンを書いて漏れを防ぐ
         public static float CalculationArea5(Shape shape) => shape switch
         {
             // 型パターン
@@ -223,6 +227,45 @@ namespace PatternMathes
             // 破棄パターン
             _ => "引き分け"
         };
+
+        // その他の記述例
+        void DisplayPlusNum(int n)
+        {
+            var newNum = n switch
+            {
+                0 => 1,
+                1 => 2,
+                2 => 3,
+                _ => throw new System.InvalidOperationException()
+            };
+            Debug.Log(newNum);
+        }
+
+        // メソッドを実行したい時は、返り値に Action を使用しよう と思ったがやはり だめ
+        // void 型を返り値に実行したいがどうもうまくいかん
+        // StateSample1 に 実現した方法を記述した
+        Action StateSample0(Hand hand) => hand switch
+        {
+            // Hand.Rock => Debug.Log("ぐー"),
+            _ => throw new System.InvalidOperationException()
+        };
+
+        // string を介して他のメソッドを実行する処理を記述
+        void StateSample1(Hand hand)
+        {
+            var callBackMethod = hand switch
+            {
+                Hand.Paper => nameof(CallBackMethodSample),   // 文字列型の返り値が action に代入される
+                _ => throw new System.InvalidOperationException()
+            };
+            // 文字列を介して処理を実行
+            SendMessage(callBackMethod);
+        }
+
+        void CallBackMethodSample()
+        {
+            Debug.Log("呼ばれたよ");
+        }
 
         # endregion
     }

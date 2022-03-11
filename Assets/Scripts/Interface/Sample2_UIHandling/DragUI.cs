@@ -17,7 +17,7 @@ public class DragUI : MonoBehaviour,
     // クリック(Down)された時実行される
     public void OnPointerDown(PointerEventData eventData)
     {
-        transform.localScale = Vector3.one * 1.2f;
+        transform.localScale = Vector3.one;
     }
     // クリックして指を離した時(Up)実行される
     public void OnPointerUp(PointerEventData eventData)
