@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1_WithInterface : MonoBehaviour
+public class Enemy1_WithInterface : MonoBehaviour, ICharacter
 {
     [SerializeField] int _maxHP = 0;
     public int HP { get; set; }
