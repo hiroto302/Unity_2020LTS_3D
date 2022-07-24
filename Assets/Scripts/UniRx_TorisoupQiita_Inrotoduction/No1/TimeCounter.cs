@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ToriQita1
 {
-    public class TimerCounter : MonoBehaviour
+    public class TimeCounter : MonoBehaviour
     {
         // イベントハンドラー(イベントメッセージの型定義)
         public delegate void TimerEventHandler(int time);
