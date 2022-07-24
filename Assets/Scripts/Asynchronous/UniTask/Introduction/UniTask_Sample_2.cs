@@ -84,7 +84,6 @@ public class UniTask_Sample_2 : MonoBehaviour
     IEnumerator UseUniTaskExample()
     {
         yield return UniTask.Delay(1000).ToCoroutine();
-
         yield return UniTaskExample();
     }
 
